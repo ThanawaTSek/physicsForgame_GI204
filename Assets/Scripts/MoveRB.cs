@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveRB : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpF;
+    [SerializeField] private float downF;
+
+    private Rigidbody rb;
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
         
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        rb.velocity = movement * speed;
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rb.AddForce(Vector3.up * jumpF , ForceMode.Impulse);
+        }
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.AddForce(Vector3.down * downF , ForceMode.Impulse);
+        }
     }
 }
